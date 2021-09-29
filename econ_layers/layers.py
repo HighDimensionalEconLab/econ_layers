@@ -27,8 +27,6 @@ class FlexibleSequential(nn.Module):
         LastLayer=nn.Identity,
         hidden_bias=True,
         last_bias=True,
-        device=None,
-        dtype=None,
     ):
         """
         Init method.
@@ -42,27 +40,20 @@ class FlexibleSequential(nn.Module):
         self.LastLayer = LastLayer
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
-        self.device = device
-        self.dtype = dtype
 
         # Constructor
         self.model = nn.Sequential(
-            nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias, device = self.device, dtype = self.dtype),
+            nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias),
             self.Activator(),
             # Add in layers - 1
             *[
                 nn.Sequential(
-                    nn.Linear(
-                        self.hidden_dim,
-                        self.hidden_dim,
-                        bias=self.hidden_bias,
-                        device = self.device, dtype = self.dtype
-                    ),
+                    nn.Linear(self.hidden_dim, self.hidden_dim, bias=self.hidden_bias),
                     self.Activator(),
                 )
                 for i in range(self.layers - 1)
             ],
-            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias, device = self.device, dtype = self.dtype),
+            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias),
             self.LastLayer()
         )
 
