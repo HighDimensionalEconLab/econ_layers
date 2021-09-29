@@ -1,6 +1,6 @@
 # Pytorch Layers for Economics Applications
 
-[![image](https://img.shields.io/pypi/v/econ_layers.svg)](https://pypi.python.org/pypi/econ_layers) [![Build Status](https://github.com/HighDimensionalEconLab/econ_layers.jl/workflows/build/badge.svg)](https://github.com/HighDimensionalEconLab/DifferentiableStateSpaceModels.jl/actions)
+[![image](https://img.shields.io/pypi/v/econ_layers.svg)](https://pypi.python.org/pypi/econ_layers) [![Build Status](https://github.com/HighDimensionalEconLab/econ_layers/workflows/build/badge.svg)](https://github.com/HighDimensionalEconLab/econ_layers/actions)
 
 ## Pytorch 
 
