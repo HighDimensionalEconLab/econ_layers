@@ -24,9 +24,11 @@ class FlexibleSequential(nn.Module):
         layers,
         hidden_dim,
         Activator=nn.ReLU,
-        LastLayer=nn.Identity,
         hidden_bias=True,
-        last_bias=True,
+        LastActivator=nn.Identity,
+        last_activator_bias=True,
+        RescalingLayer=None,
+        rescaling_layer_kwargs=[]
     ):
         """
         Init method.
@@ -37,9 +39,16 @@ class FlexibleSequential(nn.Module):
         self.layers = layers
         self.hidden_dim = hidden_dim
         self.Activator = Activator
-        self.LastLayer = LastLayer
+        self.LastActivator = LastActivator
         self.hidden_bias = hidden_bias
-        self.last_bias = last_bias
+        self.last_activator_bias = last_activator_bias
+        self.rescaling_layer_args = rescaling_layer_kwargs
+        self.RescalingLayer = RescalingLayer # must map n_in to (n_out x n_out) matrix
+
+        if not self.RescalingLayer == None:
+            self.rescale = RescalingLayer(**rescaling_layer_kwargs)  # construct as required
+        else:
+            self.rescale = None
 
         # Constructor
         self.model = nn.Sequential(
@@ -53,12 +62,18 @@ class FlexibleSequential(nn.Module):
                 )
                 for i in range(self.layers - 1)
             ],
-            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias),
-            self.LastLayer()
+            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_activator_bias),
+            self.LastActivator()
         )
 
     def forward(self, input):
-        return self.model(input)  # pass through to the stored net
+        out = self.model(input)  # pass through to the stored net
+        if not self.RescalingLayer is None:
+            # The rescaling should take n_in -> a n_out x n_out matrix
+            # then out = model(input)*rescale(input) 
+            return out # TODO
+        else:
+            return out
 
     def string(self):
         return self.model.string()  # dispay as

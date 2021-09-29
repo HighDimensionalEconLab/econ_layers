@@ -18,7 +18,7 @@ def test_simple_flexible_derivative():
     n_out = 3
     mod = FlexibleSequential(n_in, n_out, layers=3, hidden_dim=128).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
-    test = torch.autograd.gradcheck(mod, input)
+    assert(torch.autograd.gradcheck(mod, input))
 
 
 ## A few other checks on important features.
