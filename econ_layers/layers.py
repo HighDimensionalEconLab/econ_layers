@@ -26,7 +26,7 @@ class FlexibleSequential(nn.Module):
         Activator=nn.ReLU,
         hidden_bias=True,
         LastActivator=nn.Identity,
-        last_activator_bias=True,
+        last_bias=True,
         RescalingLayer=None,
         rescaling_layer_kwargs=[]
     ):
@@ -41,7 +41,7 @@ class FlexibleSequential(nn.Module):
         self.Activator = Activator
         self.LastActivator = LastActivator
         self.hidden_bias = hidden_bias
-        self.last_activator_bias = last_activator_bias
+        self.last_bias = last_bias
         self.rescaling_layer_args = rescaling_layer_kwargs
         self.RescalingLayer = RescalingLayer # must map n_in to (n_out x n_out) matrix
 
@@ -62,7 +62,7 @@ class FlexibleSequential(nn.Module):
                 )
                 for i in range(self.layers - 1)
             ],
-            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_activator_bias),
+            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias),
             self.LastActivator()
         )
 
