@@ -16,7 +16,7 @@ class Exponential(nn.Module):
         return torch.exp(input)
 
 
-class BaselineSequential(nn.Module):
+class FlexibleSequential(nn.Module):
     def __init__(
         self,
         n_in,
@@ -27,6 +27,8 @@ class BaselineSequential(nn.Module):
         LastLayer=nn.Identity,
         hidden_bias=True,
         last_bias=True,
+        device=None,
+        dtype=None,
     ):
         """
         Init method.
@@ -40,10 +42,12 @@ class BaselineSequential(nn.Module):
         self.LastLayer = LastLayer
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
+        self.device = device
+        self.dtype = dtype
 
         # Constructor
         self.model = nn.Sequential(
-            nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias),
+            nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias, device = self.device, dtype = self.dtype),
             self.Activator(),
             # Add in layers - 1
             *[
@@ -52,12 +56,13 @@ class BaselineSequential(nn.Module):
                         self.hidden_dim,
                         self.hidden_dim,
                         bias=self.hidden_bias,
+                        device = self.device, dtype = self.dtype
                     ),
                     self.Activator(),
                 )
                 for i in range(self.layers - 1)
             ],
-            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias),
+            nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias, device = self.device, dtype = self.dtype),
             self.LastLayer()
         )
 
