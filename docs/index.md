@@ -1,21 +1,16 @@
-# Welcome to econ_layers
+# Pytorch Layers for Economics Applications
+
+[![image](https://img.shields.io/pypi/v/econ_layers.svg)](https://pypi.python.org/pypi/econ_layers) [![Build Status](https://github.com/HighDimensionalEconLab/econ_layers/workflows/build/badge.svg)](https://github.com/HighDimensionalEconLab/econ_layers/actions)
+
+## Pytorch 
 
 
-[![image](https://img.shields.io/pypi/v/econ_layers.svg)](https://pypi.python.org/pypi/econ_layers)
-
-[![image](https://pyup.io/repos/github/HighDimensionalEconLab/econ_layers/shield.svg)](https://pyup.io/repos/github/HighDimensionalEconLab/econ_layers)
-
-
-**Python Boilerplate contains all the boilerplate you need to create a Python package.**
-
-
--   Free software: MIT license
--   Documentation: <https://HighDimensionalEconLab.github.io/econ_layers>
-    
+-   Documentation: https://HighDimensionalEconLab.github.io/econ_layers
 
 ## Features
 
--   TODO
+- Exponential layer
+- Flexible multi-layer neural network with optional nonlinear last layer
 
 ## Credits
 

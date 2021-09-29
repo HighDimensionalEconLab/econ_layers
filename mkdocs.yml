@@ -1,4 +1,4 @@
-site_name: econ_layers
+site_name: Pytorch Layers for Economics Applications
 
 site_url: https://HighDimensionalEconLab.github.io/econ_layers
 
@@ -39,9 +39,7 @@ markdown_extensions:
 
 nav:
     - Home: index.md
-    - Installation: installation.md
     - Usage: usage.md
-    - FAQ: faq.md
     - Report Issues: https://github.com/HighDimensionalEconLab/econ_layers/issues
     - API Reference:
           - econ_layers module: econ_layers.md
