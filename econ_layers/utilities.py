@@ -1,3 +1,5 @@
+import torch
+
 def squeeze_cpu(x):
     return x.detach().squeeze().cpu().numpy() if torch.is_tensor(x) else x
   
