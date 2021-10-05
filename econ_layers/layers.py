@@ -24,11 +24,13 @@ class FlexibleSequential(nn.Module):
         layers,
         hidden_dim,
         Activator=nn.ReLU,
+        activator_kwargs={},
         hidden_bias=True,
         LastActivator=nn.Identity,
+        last_activator_kwargs={},
         last_bias=True,
         RescalingLayer=None,
-        rescaling_layer_kwargs=[]
+        rescaling_layer_kwargs={}
     ):
         """
         Init method.
@@ -39,7 +41,9 @@ class FlexibleSequential(nn.Module):
         self.layers = layers
         self.hidden_dim = hidden_dim
         self.Activator = Activator
+        self.activator_kwargs = activator_kwargs
         self.LastActivator = LastActivator
+        self.last_activator_kwargs = last_activator_kwargs
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
         self.rescaling_layer_args = rescaling_layer_kwargs
@@ -53,17 +57,17 @@ class FlexibleSequential(nn.Module):
         # Constructor
         self.model = nn.Sequential(
             nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias),
-            self.Activator(),
+            self.Activator(**self.activator_kwargs),
             # Add in layers - 1
             *[
                 nn.Sequential(
                     nn.Linear(self.hidden_dim, self.hidden_dim, bias=self.hidden_bias),
-                    self.Activator(),
+                    self.Activator(**self.activator_kwargs),
                 )
                 for i in range(self.layers - 1)
             ],
             nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias),
-            self.LastActivator()
+            self.LastActivator(**self.last_activator_kwargs)
         )
 
     def forward(self, input):

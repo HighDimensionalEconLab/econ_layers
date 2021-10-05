@@ -3,6 +3,8 @@
 import pytest
 import torch
 import numpy as np
+import torch
+from torch import nn
 import numpy.testing
 import torch.autograd.gradcheck
 from torch.autograd import Variable
@@ -22,3 +24,11 @@ def test_simple_flexible_derivative():
 
 
 ## A few other checks on important features.
+
+# Unit testing of the autodiff.  Easy here, but need to be more advanced later
+def test_simple_flexible_derivative_softplus():
+    n_in = 20
+    n_out = 3
+    mod = FlexibleSequential(n_in, n_out, layers=3, hidden_dim=128, LastActivator=nn.Softplus, last_activator_kwargs={"beta": 2.0} ).double()
+    input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
+    assert(torch.autograd.gradcheck(mod, input))
