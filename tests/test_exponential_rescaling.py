@@ -36,4 +36,4 @@ def test_exponential_scalar():
     for epoch in range(num_epochs):
         train(model, (x, y), target, optimizer)
 
-    assert(model.weights.item() == parameter)
+    assert(pytest.approx(model.weights.item()) == parameter)
