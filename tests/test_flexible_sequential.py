@@ -9,7 +9,7 @@ import numpy.testing
 import torch.autograd.gradcheck
 from torch.autograd import Variable
 
-from econ_layers.layers import FlexibleSequential, ScalarExponentialRescale
+from econ_layers.layers import FlexibleSequential, ScalarExponentialRescaling
 
 torch.set_printoptions(16)  # to be able to see what is going on
 
