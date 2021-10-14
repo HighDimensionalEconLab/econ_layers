@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from econ_layers.layers import DiagonalExponentialRescaling, ScalarExponentialRescaling
+from econ_layers.layers import ScalarExponentialRescaling
 from tests.helpers import train, test
 
 torch.set_printoptions(16)  # to be able to see what is going on
