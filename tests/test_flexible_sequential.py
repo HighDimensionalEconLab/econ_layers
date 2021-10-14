@@ -37,7 +37,7 @@ def test_simple_flexible_derivative_softplus():
 def test_simple_flexible_derivative_rescale():
     n_in = 2
     n_out = 2
-    mod = FlexibleSequential(n_in, n_out, layers=3, hidden_dim=128, RescalingLayer = ScalarExponentialRescaling).double()
+    mod = FlexibleSequential(n_in, n_out, layers=3, hidden_dim=128, RescalingLayer=ScalarExponentialRescaling).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
     assert(torch.autograd.gradcheck(mod, input))
     
