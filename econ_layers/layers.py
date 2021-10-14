@@ -2,28 +2,21 @@ import torch
 from torch import nn
 
 
-# Given an input y this calculates:
-# exp(D x) * y for the pointwise multiple and exponential
-class DiagonalExponentialRescaling(nn.Module):
-    def __init__(self, n_in):
-        super().__init__()  # init the base class
+# Scalar rescaling.  Only one parameter.
+class ScalarExponentialRescaling(nn.Module):
+    def __init__(self, n_in = 1):
+        super().__init__()
         self.n_in = n_in
-        self.weights = torch.nn.Parameter(torch.Tensor(n_in))
+        self.weight = torch.nn.Parameter(torch.Tensor(1)) # only one parameter to "learn"
         self.reset_parameters()
         
     def reset_parameters(self):
         # Lets start at zero, but later could have option
-        torch.nn.init.zeros_(self.weights)        
+        torch.nn.init.zeros_(self.weight)
     
     def forward(self, x, y):
-        exp_x = torch.exp(torch.mul(x, self.weights))  # exponential of input
+        exp_x = torch.exp(self.weight * x)  # exponential of input
         return torch.mul(exp_x, y)
-
-
-# Scalar rescaling.  Only one parameter.
-class ScalarExponentialRescaling(DiagonalExponentialRescaling): # extends diagonal version
-    def __init__(self):
-        super().__init__(1) # only one parameter to "learn"
         
 
 # There is no exponential layer in pytorch, so this adds one.
