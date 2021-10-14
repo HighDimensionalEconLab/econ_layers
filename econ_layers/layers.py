@@ -1,6 +1,24 @@
 import torch
 from torch import nn
 
+
+# Scalar rescaling.  Only one parameter.
+class ScalarExponentialRescaling(nn.Module):
+    def __init__(self, n_in = 1):
+        super().__init__()
+        self.n_in = n_in
+        self.weight = torch.nn.Parameter(torch.Tensor(1)) # only one parameter to "learn"
+        self.reset_parameters()
+        
+    def reset_parameters(self):
+        # Lets start at zero, but later could have option
+        torch.nn.init.zeros_(self.weight)
+    
+    def forward(self, x, y):
+        exp_x = torch.exp(self.weight * x)  # exponential of input
+        return torch.mul(exp_x, y)
+        
+
 # There is no exponential layer in pytorch, so this adds one.
 class Exponential(nn.Module):
     def __init__(self):
