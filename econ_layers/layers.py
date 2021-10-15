@@ -2,6 +2,16 @@ import torch
 from torch import nn
 
 
+# rescaling by a specific element of a given input
+class InputRescaling(nn.Module):
+    def __init__(self, rescale_index):
+        super().__init__()
+        self.rescale_index = rescale_index
+        
+    def forward(self, x, y):
+        return y / x[self.rescale_index]
+    
+
 # Scalar rescaling.  Only one parameter.
 class ScalarExponentialRescaling(nn.Module):
     def __init__(self, n_in = 1):
