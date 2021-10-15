@@ -93,7 +93,7 @@ class FlexibleSequential(nn.Module):
         if not self.RescalingLayer is None:
             # The rescaling should take n_in -> a n_out x n_out matrix
             # then out = model(input)*rescale(input) 
-            return out # TODO
+            return self.rescale(input, out)
         else:
             return out
 
