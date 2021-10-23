@@ -9,7 +9,7 @@ class InputRescaling(nn.Module):
         self.rescale_index = rescale_index
         
     def forward(self, x, y):
-        return y / x[self.rescale_index]
+        return y * x[self.rescale_index]
     
 
 # Scalar rescaling.  Only one parameter.
