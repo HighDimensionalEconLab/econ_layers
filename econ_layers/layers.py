@@ -9,7 +9,10 @@ class InputRescaling(nn.Module):
         self.rescale_index = rescale_index
 
     def forward(self, x, y):
-        return x[:, [self.rescale_index]] * y
+        if x.dim() == 1:
+            return x[self.rescale_index] * y
+        else:
+            return x[:, [self.rescale_index]] * y
 
 
 # [[z_0,k_0], [z]]

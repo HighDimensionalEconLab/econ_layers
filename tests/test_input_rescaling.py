@@ -32,3 +32,6 @@ def test_input_rescaling():
 
     assert torch.all(torch.isclose(input_mult_0, x[:, [0]] * x[:, [1]]))
     assert torch.all(torch.isclose(input_mult_1, x[:, [0]] * x[:, [1]]))
+
+
+test_input_rescaling()
