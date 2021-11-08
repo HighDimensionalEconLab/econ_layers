@@ -70,6 +70,3 @@ def test_simple_flexible_derivative_input_rescale():
     ).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
     assert torch.autograd.gradcheck(mod, input)
-
-
-test_simple_flexible_derivative_input_rescale()
