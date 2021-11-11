@@ -5,7 +5,7 @@
 import pytest
 import torch
 import numpy
-from econ_layers.layers import InputRescaling
+from econ_layers.layers import RescaleOutputsByInput
 
 
 def test_input_rescaling():
@@ -23,8 +23,8 @@ def test_input_rescaling():
         ),
     )
 
-    input_layer_0 = InputRescaling(0)
-    input_layer_1 = InputRescaling(1)
+    input_layer_0 = RescaleOutputsByInput(0)
+    input_layer_1 = RescaleOutputsByInput(1)
     y_1 = x[:, [0]]
     y_0 = x[:, [1]]
     input_mult_0 = input_layer_0(x, y_0)
@@ -34,4 +34,3 @@ def test_input_rescaling():
     assert torch.all(torch.isclose(input_mult_1, x[:, [0]] * x[:, [1]]))
 
 
-test_input_rescaling()

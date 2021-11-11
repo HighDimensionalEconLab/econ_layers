@@ -11,7 +11,7 @@ from torch.autograd import Variable
 
 from econ_layers.layers import (
     FlexibleSequential,
-    InputRescaling,
+    RescaleOutputsByInput,
     ScalarExponentialRescaling,
 )
 
@@ -65,7 +65,7 @@ def test_simple_flexible_derivative_input_rescale():
         n_out,
         layers=3,
         hidden_dim=128,
-        RescalingLayer=InputRescaling,
+        RescalingLayer=RescaleOutputsByInput,
         rescaling_layer_kwargs={"rescale_index": 0},
     ).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
