@@ -2,6 +2,7 @@ import torch
 from copy import deepcopy
 from torch import nn
 from typing import Optional
+from jsonargparse import lazy_instance
 
 # rescaling by a specific element of a given input
 class RescaleOutputsByInput(nn.Module):
@@ -60,9 +61,9 @@ class FlexibleSequential(nn.Module):
         n_out: int,
         layers: int,
         hidden_dim: int,
-        activator: Optional[nn.Module] = nn.ReLU(),
+        activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
         hidden_bias: bool = True,
-        last_activator: Optional[nn.Module] = nn.Identity(),
+        last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
         last_bias=True,
         rescaling_layer: Optional[nn.Module] = None,
     ):
@@ -106,6 +107,3 @@ class FlexibleSequential(nn.Module):
             return self.rescaling_layer(input, out)
         else:
             return out
-
-    def string(self):
-        return self.model.string()  # dispay as
