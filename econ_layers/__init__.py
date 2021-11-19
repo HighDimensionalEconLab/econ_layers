@@ -8,15 +8,11 @@ __version__ = "0.0.1"
 
 warnings.filterwarnings(
     "ignore",
-    ".*does not have many workers. Consider increasing the value.*",
+    ".*does not have many workers which may be.*",
 )
 warnings.filterwarnings(
     "ignore",
     ".*is smaller than the logging.*",
-)
-warnings.filterwarnings(
-    "ignore",
-    ".*does not have many workers. Consider increasing the value of the `num_workers` argument*",
 )
 warnings.filterwarnings(
     "ignore",
