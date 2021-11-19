@@ -27,7 +27,7 @@ def test_exponential_scalar():
     n_in = 100
     parameter = 0.02
 
-    x = torch.linspace(0, 10, steps = n_in).double()
+    x = torch.linspace(0, 10, steps=n_in).double()
     exp_x = torch.exp(parameter * x)
     y = 10 * torch.rand(n_in)
     target = torch.mul(exp_x, y)
@@ -36,4 +36,4 @@ def test_exponential_scalar():
     for epoch in range(num_epochs):
         train(model, (x, y), target, optimizer)
 
-    assert(pytest.approx(model.weight.item()) == parameter)
+    assert pytest.approx(model.weight.item()) == parameter
