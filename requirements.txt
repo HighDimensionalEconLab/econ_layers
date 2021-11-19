@@ -1,5 +1,5 @@
-pytorch-lightning
-torch >= 1.9.1
+pytorch-lightning >= 1.5.2
+torch >= 1.10
 pytest
 black
 numpy
