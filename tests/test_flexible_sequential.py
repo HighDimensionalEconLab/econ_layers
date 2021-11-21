@@ -34,7 +34,12 @@ def test_simple_flexible_derivative_softplus():
     n_in = 20
     n_out = 3
     mod = FlexibleSequential(
-        n_in, n_out, layers=3, hidden_dim=128, last_activator=nn.Softplus(beta=2.0),
+        n_in, 
+        n_out, 
+        layers=3, 
+        hidden_dim=128, 
+        LastActivator=nn.Softplus, 
+        last_activator_kwargs = {"beta": 2.0},
     ).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
     assert torch.autograd.gradcheck(mod, input)
@@ -49,7 +54,7 @@ def test_simple_flexible_derivative_rescale():
         n_out,
         layers=3,
         hidden_dim=128,
-        rescaling_layer=ScalarExponentialRescaling(),
+        RescalingLayer=ScalarExponentialRescaling,
     ).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
     assert torch.autograd.gradcheck(mod, input)
@@ -64,7 +69,8 @@ def test_simple_flexible_derivative_input_rescale():
         n_out,
         layers=3,
         hidden_dim=128,
-        rescaling_layer=RescaleOutputsByInput(rescale_index=0),
+        RescalingLayer=RescaleOutputsByInput,
+        rescaling_layer_kwargs={"rescale_index": 0},
     ).double()
     input = (Variable(torch.randn(n_in).double(), requires_grad=True),)
     assert torch.autograd.gradcheck(mod, input)
