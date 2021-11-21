@@ -1,14 +1,10 @@
 import torch
-from copy import deepcopy
 from torch import nn
-from typing import Optional
-from jsonargparse import lazy_instance
-from jsonargparse.typing import final
+
 
 # rescaling by a specific element of a given input
-@final
 class RescaleOutputsByInput(nn.Module):
-    def __init__(self, rescale_index: int):
+    def __init__(self, rescale_index):
         super().__init__()
         self.rescale_index = rescale_index
 
@@ -23,9 +19,8 @@ class RescaleOutputsByInput(nn.Module):
 
 
 # Scalar rescaling.  Only one parameter.
-@final
 class ScalarExponentialRescaling(nn.Module):
-    def __init__(self, n_in: int = 1):
+    def __init__(self, n_in=1):
         super().__init__()
         self.n_in = n_in
         self.weight = torch.nn.Parameter(
@@ -43,7 +38,6 @@ class ScalarExponentialRescaling(nn.Module):
 
 
 # There is no exponential layer in pytorch, so this adds one.
-@final
 class Exponential(nn.Module):
     def __init__(self):
         """
@@ -58,19 +52,21 @@ class Exponential(nn.Module):
         return torch.exp(input)
 
 
-@final
 class FlexibleSequential(nn.Module):
     def __init__(
         self,
-        n_in: int,
-        n_out: int,
-        layers: int,
-        hidden_dim: int,
-        activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
-        hidden_bias: bool = True,
-        last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
+        n_in,
+        n_out,
+        layers,
+        hidden_dim,
+        Activator=nn.ReLU,
+        activator_kwargs={},
+        hidden_bias=True,
+        LastActivator=nn.Identity,
+        last_activator_kwargs={},
         last_bias=True,
-        rescaling_layer: Optional[nn.Module] = None,
+        RescalingLayer=None,
+        rescaling_layer_kwargs={},
     ):
         """
         Init method.
@@ -80,35 +76,46 @@ class FlexibleSequential(nn.Module):
         self.n_out = n_out
         self.layers = layers
         self.hidden_dim = hidden_dim
-        self.activator = activator
-        self.last_activator = last_activator
+        self.Activator = Activator
+        self.activator_kwargs = activator_kwargs
+        self.LastActivator = LastActivator
+        self.last_activator_kwargs = last_activator_kwargs
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
-        self.rescaling_layer = rescaling_layer
+        self.rescaling_layer_args = rescaling_layer_kwargs
+        self.RescalingLayer = RescalingLayer  # must map n_in to (n_out x n_out) matrix
+
+        if not self.RescalingLayer == None:
+            self.rescale = RescalingLayer(
+                **rescaling_layer_kwargs
+            )  # construct as required
+        else:
+            self.rescale = None
 
         # Constructor
         self.model = nn.Sequential(
             nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias),
-            self.activator,
+            self.Activator(**self.activator_kwargs),
             # Add in layers - 1
             *[
                 nn.Sequential(
                     nn.Linear(self.hidden_dim, self.hidden_dim, bias=self.hidden_bias),
-                    deepcopy(
-                        self.activator
-                    ),  # use as prototype. Cannot support learnable paramters in activator
+                    self.Activator(**self.activator_kwargs),
                 )
                 for i in range(self.layers - 1)
             ],
             nn.Linear(self.hidden_dim, self.n_out, bias=self.last_bias),
-            self.last_activator
+            self.LastActivator(**self.last_activator_kwargs)
         )
 
     def forward(self, input):
         out = self.model(input)  # pass through to the stored net
-        if not self.rescaling_layer is None:
+        if not self.RescalingLayer is None:
             # The rescaling should take n_in -> a n_out x n_out matrix
             # then out = model(input)*rescale(input)
-            return self.rescaling_layer(input, out)
+            return self.rescale(input, out)
         else:
             return out
+
+    def string(self):
+        return self.model.string()  # dispay as
