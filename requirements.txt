@@ -3,4 +3,4 @@ torch >= 1.10
 pytest
 black
 numpy
-jsonargparse 
+jsonargparse >= 4.0.2
