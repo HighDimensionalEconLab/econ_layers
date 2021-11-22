@@ -3,10 +3,8 @@ from copy import deepcopy
 from torch import nn
 from typing import Optional
 from jsonargparse import lazy_instance
-from jsonargparse.typing import final
 
 # rescaling by a specific element of a given input
-@final
 class RescaleOutputsByInput(nn.Module):
     def __init__(self, rescale_index: int):
         super().__init__()
@@ -23,7 +21,6 @@ class RescaleOutputsByInput(nn.Module):
 
 
 # Scalar rescaling.  Only one parameter.
-@final
 class ScalarExponentialRescaling(nn.Module):
     def __init__(self, n_in: int = 1):
         super().__init__()
@@ -43,7 +40,6 @@ class ScalarExponentialRescaling(nn.Module):
 
 
 # There is no exponential layer in pytorch, so this adds one.
-@final
 class Exponential(nn.Module):
     def __init__(self):
         """
@@ -58,7 +54,6 @@ class Exponential(nn.Module):
         return torch.exp(input)
 
 
-@final
 class FlexibleSequential(nn.Module):
     def __init__(
         self,
