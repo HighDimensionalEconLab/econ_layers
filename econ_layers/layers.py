@@ -57,10 +57,10 @@ class Exponential(nn.Module):
 class FlexibleSequential(nn.Module):
     def __init__(
         self,
-        n_in: int,
-        n_out: int,
-        layers: int,
-        hidden_dim: int,
+        n_in: int = 1,
+        n_out: int = 1,
+        layers: int = 4,
+        hidden_dim: int = 128,
         activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
         hidden_bias: bool = True,
         last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
