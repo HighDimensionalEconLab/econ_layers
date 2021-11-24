@@ -6,7 +6,7 @@ from jsonargparse import lazy_instance
 
 # rescaling by a specific element of a given input
 class RescaleOutputsByInput(nn.Module):
-    def __init__(self, rescale_index: int):
+    def __init__(self, rescale_index: int = 0):
         super().__init__()
         self.rescale_index = rescale_index
 
@@ -57,9 +57,9 @@ class Exponential(nn.Module):
 class FlexibleSequential(nn.Module):
     def __init__(
         self,
-        n_in: int = 1,
-        n_out: int = 1,
-        layers: int = 4,
+        n_in: int,
+        n_out: int,
+        layers: int,
         hidden_dim: int = 128,
         activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
         hidden_bias: bool = True,
