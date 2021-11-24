@@ -1,0 +1,10 @@
+model:
+  ml_model:
+    class_path: econ_layers.layers.FlexibleSequential
+    init_args:
+      n_in: 1
+      n_out: 1
+      layers: 5
+      hidden_dim: 122
+      hidden_bias: true
+      last_bias: true
