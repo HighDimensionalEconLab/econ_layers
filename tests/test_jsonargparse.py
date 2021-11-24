@@ -13,7 +13,7 @@ class TestModel(pl.LightningModule):
 def test_edit_layers():
     sys.argv = [
         "cli.py",
-        "--config=default_jsonargparse_test_1.yaml",
+        "--config=tests/default_jsonargparse_test_1.yaml",
         "--trainer.max_epochs=5",
         "--model.ml_model.init_args.layers=4",
     ]
