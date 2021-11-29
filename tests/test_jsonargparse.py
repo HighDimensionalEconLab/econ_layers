@@ -38,4 +38,5 @@ def test_edit_layers():
             "rescaling_layer": None,
         },
     }
-    assert cli.config.as_dict()["model"]["ml_model"] == ml_model_expected
+    config = cli.config.as_dict()
+    assert config["model"]["ml_model"] == ml_model_expected
