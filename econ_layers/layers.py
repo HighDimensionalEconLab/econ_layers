@@ -17,6 +17,22 @@ class RescaleOutputsByInput(nn.Module):
             return x[:, [self.rescale_index]] * y
 
 
+class RescaleInputByInput(nn.Module):
+    def __init__(self, rescale_index: int = 0, rescalled_index=1):
+        super().__init__()
+        self.rescale_index = rescale_index
+        self.rescalled_index = rescalled_index
+
+    def forward(self, x):
+        if x.dim() == 1:
+            x[self.rescalled_index] = x[self.rescalled_index] / x[self.rescale_index]
+        else:
+            x[:, [self.rescalled_index]] = (
+                x[:, [self.rescalled_index]] / x[:, [self.rescale_index]]
+            )
+        return x
+
+
 # [[z_0,k_0], [z]]
 
 
@@ -66,6 +82,7 @@ class FlexibleSequential(nn.Module):
         last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
         last_bias=True,
         rescaling_layer: Optional[nn.Module] = None,
+        rescaling_input: Optional[nn.Module] = None,
     ):
         """
         Init method.
@@ -80,7 +97,7 @@ class FlexibleSequential(nn.Module):
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
         self.rescaling_layer = rescaling_layer
-
+        self.rescaling_input = rescaling_input
         # Constructor
         self.model = nn.Sequential(
             nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias),
@@ -100,6 +117,9 @@ class FlexibleSequential(nn.Module):
         )
 
     def forward(self, input):
+        if not self.rescaling_input is None:
+            input = self.rescaling_input(input)
+
         out = self.model(input)  # pass through to the stored net
         if not self.rescaling_layer is None:
             # The rescaling should take n_in -> a n_out x n_out matrix
