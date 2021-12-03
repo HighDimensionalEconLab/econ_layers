@@ -36,6 +36,7 @@ def test_edit_layers():
             "last_activator": {"class_path": "torch.nn.modules.linear.Identity"},
             "last_bias": True,
             "rescaling_layer": None,
+            "rescaling_input": None,
         },
     }
     assert cli.config["model"]["ml_model"] == ml_model_expected
