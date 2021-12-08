@@ -82,7 +82,7 @@ class FlexibleSequential(nn.Module):
         last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
         last_bias=True,
         rescaling_layer: Optional[nn.Module] = None,
-        rescaling_input: Optional[nn.Module] = None,
+        InputRescalingLayer: Optional[nn.Module] = None,
     ):
         """
         Init method.
@@ -97,7 +97,7 @@ class FlexibleSequential(nn.Module):
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
         self.rescaling_layer = rescaling_layer
-        self.rescaling_input = rescaling_input
+        self.InputRescalingLayer = InputRescalingLayer
         # Constructor
         self.model = nn.Sequential(
             nn.Linear(self.n_in, self.hidden_dim, bias=self.hidden_bias),
@@ -117,8 +117,8 @@ class FlexibleSequential(nn.Module):
         )
 
     def forward(self, input):
-        if not self.rescaling_input is None:
-            input = self.rescaling_input(input)
+        if not self.InputRescalingLayer is None:
+            input = self.InputRescalingLayer(input)
 
         out = self.model(input)  # pass through to the stored net
         if not self.rescaling_layer is None:
