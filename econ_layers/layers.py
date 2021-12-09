@@ -17,20 +17,27 @@ class RescaleOutputsByInput(nn.Module):
             return x[:, [self.rescale_index]] * y
 
 
-class RescaleInputByInput(nn.Module):
-    def __init__(self, rescale_index: int = 0, rescalled_index=1):
+# assuming 2D data
+class RescaleAllInputsbyInput(nn.Module):
+    def __init__(self, rescale_index: int = 0):
         super().__init__()
         self.rescale_index = rescale_index
-        self.rescalled_index = rescalled_index
 
     def forward(self, x):
+
         if x.dim() == 1:
-            x[self.rescalled_index] = x[self.rescalled_index] / x[self.rescale_index]
+            size = x.size()[0]
+            rescale_scalar = 1 / x[self.rescale_index]
+            rescal_matrix = rescale_scalar.repeat(1, size)
+            rescal_matrix[self.rescale_index] = 1.0
+            return x * rescal_matrix
         else:
-            x[:, [self.rescalled_index]] = (
-                x[:, [self.rescalled_index]] / x[:, [self.rescale_index]]
-            )
-        return x
+            size = x.size()[1]
+            rescale_scalar = 1 / x[:, [self.rescale_index]]
+            rescal_matrix = rescale_scalar.repeat(1, size)
+            rescal_matrix[:, [self.rescale_index]] = 1.0
+
+            return x * rescal_matrix
 
 
 # [[z_0,k_0], [z]]
