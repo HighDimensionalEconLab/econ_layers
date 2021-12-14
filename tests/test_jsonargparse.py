@@ -13,13 +13,15 @@ class TestModel(pl.LightningModule):
 def test_edit_layers():
     sys.argv = [
         "cli.py",
-        "--config=tests/default_jsonargparse_test_1.yaml",
         "--trainer.max_epochs=5",
         "--model.ml_model.init_args.layers=4",
     ]
     cli = LightningCLI(
         TestModel,
         run=False,
+        parser_kwargs={
+            "default_config_files": ["tests/default_jsonargparse_test_1.yaml"]
+        },
     )
     ml_model_expected = {
         "class_path": "econ_layers.layers.FlexibleSequential",
