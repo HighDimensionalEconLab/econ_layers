@@ -88,7 +88,7 @@ class FlexibleSequential(nn.Module):
         hidden_bias: bool = True,
         last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
         last_bias=True,
-        rescaling_layer: Optional[nn.Module] = None,
+        OutputRescalingLayer: Optional[nn.Module] = None,
         InputRescalingLayer: Optional[nn.Module] = None,
     ):
         """
@@ -103,7 +103,7 @@ class FlexibleSequential(nn.Module):
         self.last_activator = last_activator
         self.hidden_bias = hidden_bias
         self.last_bias = last_bias
-        self.rescaling_layer = rescaling_layer
+        self.OutputRescalingLayer = OutputRescalingLayer
         self.InputRescalingLayer = InputRescalingLayer
         # Constructor
         self.model = nn.Sequential(
@@ -128,9 +128,9 @@ class FlexibleSequential(nn.Module):
             input = self.InputRescalingLayer(input)
 
         out = self.model(input)  # pass through to the stored net
-        if not self.rescaling_layer is None:
+        if not self.OutputRescalingLayer is None:
             # The rescaling should take n_in -> a n_out x n_out matrix
             # then out = model(input)*rescale(input)
-            return self.rescaling_layer(input, out)
+            return self.OutputRescalingLayer(input, out)
         else:
             return out

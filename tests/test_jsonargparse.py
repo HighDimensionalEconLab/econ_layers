@@ -37,7 +37,7 @@ def test_edit_layers():
             "hidden_bias": True,
             "last_activator": {"class_path": "torch.nn.modules.linear.Identity"},
             "last_bias": True,
-            "rescaling_layer": None,
+            "OutputRescalingLayer": None,
             "InputRescalingLayer": None,
         },
     }
