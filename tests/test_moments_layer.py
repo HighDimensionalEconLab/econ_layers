@@ -56,3 +56,15 @@ def test_moments_broadcast():
             expected_data,
         )
     )
+    
+    assert torch.all(
+        torch.isclose(
+            generated_data,
+            torch.tensor(
+                [
+                    [2.5e00, 7.5e00, 2.5e01, 8.85e01, 3.25e02],
+                    [6.5e00, 4.35e01, 2.99e02, 2.1045e03, 1.5119e04],
+                ]
+            ),
+        )
+    )
