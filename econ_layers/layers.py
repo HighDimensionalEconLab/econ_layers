@@ -15,7 +15,7 @@ class Moments(nn.Module):
         self.n_moments = n_moments
 
     def forward(self, input):
-        return torch.cat([input.pow(m) for m in torch.arange(1, self.n_moments + 1)])
+        return torch.cat([input.pow(m) for m in torch.arange(1, self.n_moments + 1)], 1)
 
     
 # rescaling by a specific element of a given input
