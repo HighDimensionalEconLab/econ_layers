@@ -4,6 +4,20 @@ from torch import nn
 from typing import Optional
 from jsonargparse import lazy_instance
 
+
+# produces the first m moments of a given input
+class Moments(nn.Module):
+    def __init__(
+        self,
+        n_moments: int,
+    ):
+        super().__init__()
+        self.n_moments = n_moments
+
+    def forward(self, input):
+        return torch.cat([input.pow(m) for m in torch.arange(1, self.num_moments + 1)], 1)
+
+    
 # rescaling by a specific element of a given input
 class RescaleOutputsByInput(nn.Module):
     def __init__(self, rescale_index: int = 0):
