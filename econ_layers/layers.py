@@ -20,15 +20,20 @@ class Moments(nn.Module):
     
 # rescaling by a specific element of a given input
 class RescaleOutputsByInput(nn.Module):
-    def __init__(self, rescale_index: int = 0):
+    def __init__(self, rescale_index: int = 0, bias=False):
         super().__init__()
         self.rescale_index = rescale_index
-
+        if bias:
+            self.bias =  torch.nn.Parameter(torch.Tensor(1)) # only a scalar here
+            torch.nn.init.zeros_(self.bias)     
+        else:
+            self.bias = 0.0 # register_parameter('bias', None) # necessary?
+        
     def forward(self, x, y):
         if x.dim() == 1:
-            return x[self.rescale_index] * y
+            return x[self.rescale_index] * y + self.bias
         else:
-            return x[:, [self.rescale_index]] * y
+            return x[:, [self.rescale_index]] * y + self.bias
 
 
 # assuming 2D data
