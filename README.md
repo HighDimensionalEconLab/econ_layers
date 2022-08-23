@@ -11,6 +11,7 @@
 
 - Exponential layer
 - Flexible multi-layer neural network with optional nonlinear last layer
+- Affine rescaling of output by an input
 
 
 ## Development
