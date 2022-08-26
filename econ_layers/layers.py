@@ -25,7 +25,7 @@ class RescaleOutputsByInput(nn.Module):
         self.rescale_index = rescale_index
         if bias:
             self.bias =  torch.nn.Parameter(torch.Tensor(1)) # only a scalar here
-            torch.nn.init.zeros_(self.bias)     
+            torch.nn.init.ones_(self.bias)     
         else:
             self.bias = 0.0 # register_parameter('bias', None) # necessary?
         
