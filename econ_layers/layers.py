@@ -153,3 +153,102 @@ class FlexibleSequential(nn.Module):
             return self.OutputRescalingLayer(input, out)
         else:
             return out
+
+class DeepSet(nn.Module):
+    def __init__(
+        self,
+        n_in: int,
+        n_out: int,
+        L: int,        
+        phi_layers: int,
+        rho_layers: int,
+        phi_hidden_dim: int = 128,
+        rho_hidden_dim: int = 128,
+        phi_activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
+        phi_hidden_bias: bool = True,
+        phi_last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
+        phi_last_bias=True,
+        rho_activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
+        rho_hidden_bias: bool = True,
+        rho_last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
+        rho_last_bias=True,        
+        OutputRescalingLayer: Optional[nn.Module] = None,
+        InputRescalingLayer: Optional[nn.Module] = None,
+    ):
+        """
+        Init method.
+        """
+        assert n_in == 1  # only supporting univariate states for now
+        super().__init__()  # init the base class
+        self.rho = FlexibleSequential(
+            L,
+            n_out,
+            rho_layers,
+            rho_hidden_dim,
+            rho_activator,
+            rho_hidden_bias,
+            rho_last_activator,
+            rho_last_bias,
+            OutputRescalingLayer = OutputRescalingLayer,
+        )
+
+        self.phi = FlexibleSequential(
+            n_in,
+            L,
+            phi_layers,
+            phi_hidden_dim,
+            phi_activator,
+            phi_hidden_bias,
+            phi_last_activator,
+            phi_last_bias,
+            InputRescalingLayer = InputRescalingLayer,
+        )
+
+    def forward(self, X):
+        num_batches, N = X.shape
+        phi_X = torch.stack(
+            [torch.mean(self.phi(X[i, :].reshape([N, 1])), 0) for i in range(num_batches)]
+        )
+        return self.rho(phi_X)
+
+
+
+class DeepSetMoments(nn.Module):
+    def __init__(
+        self,
+        n_in: int,
+        n_out: int,
+        L: int,        
+        rho_layers: int,
+        rho_hidden_dim: int = 128,
+        rho_activator: Optional[nn.Module] = lazy_instance(nn.ReLU),
+        rho_hidden_bias: bool = True,
+        rho_last_activator: Optional[nn.Module] = lazy_instance(nn.Identity),
+        rho_last_bias=True,        
+        OutputRescalingLayer: Optional[nn.Module] = None,
+    ):
+        """
+        Init method.
+        """
+        assert n_in == 1  # only supporting univariate states for now
+        super().__init__()  # init the base class
+        self.rho = FlexibleSequential(
+            L,
+            n_out,
+            rho_layers,
+            rho_hidden_dim,
+            rho_activator,
+            rho_hidden_bias,
+            rho_last_activator,
+            rho_last_bias,
+            OutputRescalingLayer = OutputRescalingLayer,
+        )
+
+        self.phi = Moments(L)
+
+    def forward(self, X):
+        num_batches, N = X.shape
+        phi_X = torch.stack(
+            [torch.mean(self.phi(X[i, :].reshape([N, 1])), 0) for i in range(num_batches)]
+        )
+        return self.rho(phi_X)

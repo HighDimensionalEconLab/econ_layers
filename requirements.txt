@@ -1,6 +1,5 @@
-pytorch-lightning >= 1.5.2
 torch >= 1.10
 pytest
 black
 numpy
-jsonargparse >= 4.0.4
+jsonargparse[signatures] >= 4.19
