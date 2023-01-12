@@ -57,6 +57,6 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/HighDimensionalEconLab/econ_layers",
-    version="0.0.27",
+    version="0.0.28",
     zip_safe=False,
 )
